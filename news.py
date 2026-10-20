@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 
 TZ = timezone(timedelta(hours=8))
-MAX_NEWS = 20
+MAX_NEWS = 15
 FRESH_HOURS = 36
 SUMMARY_LIMIT = 420
 REQUEST_TIMEOUT = 12
