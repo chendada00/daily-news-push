@@ -1,0 +1,54 @@
+
+name: Daily News Push
+
+on:
+  schedule:
+    - cron: "0 0,2,4,6,8,10,12,14 * * *"
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: "仅测试 PushPlus，不抓取新闻"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-news-push
+  cancel-in-progress: false
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Send test message
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.test_mode }}
+        env:
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+        run: python news.py --test
+
+      - name: Fetch and push news
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.test_mode) }}
+        env:
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          MAX_NEWS: "10"
+          FRESH_HOURS: "36"
+          TZ: Asia/Shanghai
+        run: python news.py
