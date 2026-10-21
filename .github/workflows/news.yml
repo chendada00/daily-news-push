@@ -49,7 +49,7 @@ jobs:
         env:
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
           # 以下变量需 news.py 支持读取，见下方代码补丁
-          MAX_NEWS: "10"
+          MAX_NEWS: "15"
           FRESH_HOURS: "36"
           # 可选：启用/禁用 Google 新闻源（网络受限环境建议 0）
           ENABLE_GOOGLE_NEWS: "1"
