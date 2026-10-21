@@ -1,9 +1,6 @@
 name: Daily News Push
 
 on:
-  schedule:
-    # UTC 时间；对应北京时间 08:00, 10:00, 12:00, 14:00, 16:00, 18:00, 20:00, 22:00
-    - cron: "0 0,2,4,6,8,10,12,14 * * *"
   workflow_dispatch:
     inputs:
       test_mode:
